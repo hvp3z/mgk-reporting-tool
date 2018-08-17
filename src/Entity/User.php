@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -65,6 +67,28 @@ class User
      * @ORM\Column(type="string", length=255)
      */
     private $mdp;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Reporting", mappedBy="users")
+     */
+    private $reportings;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Civilite", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $civilite;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\UserType", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $type;
+
+    public function __construct()
+    {
+        $this->reportings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -187,6 +211,58 @@ class User
     public function setMdp(string $mdp): self
     {
         $this->mdp = $mdp;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reporting[]
+     */
+    public function getReportings(): Collection
+    {
+        return $this->reportings;
+    }
+
+    public function addReporting(Reporting $reporting): self
+    {
+        if (!$this->reportings->contains($reporting)) {
+            $this->reportings[] = $reporting;
+            $reporting->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReporting(Reporting $reporting): self
+    {
+        if ($this->reportings->contains($reporting)) {
+            $this->reportings->removeElement($reporting);
+            $reporting->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    public function getCivilite(): ?Civilite
+    {
+        return $this->civilite;
+    }
+
+    public function setCivilite(Civilite $civilite): self
+    {
+        $this->civilite = $civilite;
+
+        return $this;
+    }
+
+    public function getType(): ?UserType
+    {
+        return $this->type;
+    }
+
+    public function setType(UserType $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

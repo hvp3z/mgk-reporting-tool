@@ -21,6 +21,11 @@ class ReportingType
      */
     private $designation;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Reporting", mappedBy="type", cascade={"persist", "remove"})
+     */
+    private $reporting;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -34,6 +39,23 @@ class ReportingType
     public function setDesignation(string $designation): self
     {
         $this->designation = $designation;
+
+        return $this;
+    }
+
+    public function getReporting(): ?Reporting
+    {
+        return $this->reporting;
+    }
+
+    public function setReporting(Reporting $reporting): self
+    {
+        $this->reporting = $reporting;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $reporting->getType()) {
+            $reporting->setType($this);
+        }
 
         return $this;
     }
