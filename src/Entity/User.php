@@ -253,8 +253,8 @@ class User
         $this->civilite = $civilite;
 
         return $this;
-    }
-
+    
+}
     public function getType(): ?UserType
     {
         return $this->type;
