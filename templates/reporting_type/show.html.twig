@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ReportingType{% endblock %}
+
+{% block body %}
+    <h1>ReportingType</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ reporting_type.id }}</td>
+            </tr>
+            <tr>
+                <th>Designation</th>
+                <td>{{ reporting_type.designation }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('reporting_type_index') }}">back to list</a>
+
+    <a href="{{ path('reporting_type_edit', {'id': reporting_type.id}) }}">edit</a>
+
+    {{ include('reporting_type/_delete_form.html.twig') }}
+{% endblock %}

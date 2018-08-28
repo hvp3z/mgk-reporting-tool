@@ -22,7 +22,7 @@ class UserTypeRepository extends ServiceEntityRepository
 //    /**
 //     * @return UserType[] Returns an array of UserType objects
 //     */
-    /*
+
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('u')
@@ -31,10 +31,8 @@ class UserTypeRepository extends ServiceEntityRepository
             ->orderBy('u.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
 
     /*
     public function findOneBySomeField($value): ?UserType

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reporting{% endblock %}
+
+{% block body %}
+    <h1>Reporting</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ reporting.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ reporting.nom }}</td>
+            </tr>
+            <tr>
+                <th>Datecreation</th>
+                <td>{{ reporting.datecreation ? reporting.datecreation|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('reporting_index') }}">back to list</a>
+
+    <a href="{{ path('reporting_edit', {'id': reporting.id}) }}">edit</a>
+
+    {{ include('reporting/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Reporting{% endblock %}
+
+{% block body %}
+    <h1>Create new Reporting</h1>
+
+    {{ include('reporting/_form.html.twig') }}
+
+    <a href="{{ path('reporting_index') }}">back to list</a>
+{% endblock %}

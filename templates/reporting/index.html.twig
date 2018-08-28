@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reporting index{% endblock %}
+
+{% block body %}
+    <h1>Reporting index</h1>
+
+    <table class="table ">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Datecreation</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reporting in reportings %}
+            <tr>
+                <td>{{ reporting.id }}</td>
+                <td>{{ reporting.nom }}</td>
+                <td>{{ reporting.datecreation ? reporting.datecreation|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('reporting_show', {'id': reporting.id}) }}">show</a>
+                    <a href="{{ path('reporting_edit', {'id': reporting.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('reporting_new') }}">Create new</a>
+{% endblock %}

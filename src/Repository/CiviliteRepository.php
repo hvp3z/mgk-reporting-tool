@@ -22,11 +22,11 @@ class CiviliteRepository extends ServiceEntityRepository
 //    /**
 //     * @return Civilite[] Returns an array of Civilite objects
 //     */
-    /*
+
     public function findByExampleField($value)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
+            ->andWhere('c.designation = :val')
             ->setParameter('val', $value)
             ->orderBy('c.id', 'ASC')
             ->setMaxResults(10)
@@ -34,7 +34,7 @@ class CiviliteRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Civilite

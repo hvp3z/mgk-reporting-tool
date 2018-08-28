@@ -5,18 +5,27 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ *
+ * @UniqueEntity(fields="email", message="Email déjà utilisé")
+ * @UniqueEntity(fields="username", message="Nom d'utilisateur déjà utilisé")
+ *
  */
-class User
+class User implements UserInterface, \Serializable
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -27,6 +36,12 @@ class User
      * @ORM\Column(type="string", length=255)
      */
     private $prenom;
+
+
+    /**
+     * @ORM\Column(type="json_array")
+     */
+    private $roles = array();
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -49,6 +64,32 @@ class User
     private $email;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(max=4096)
+     */
+    private $plainPassword;
+
+
+    /**
+     * The below length depends on the "algorithm" you use for encoding
+     * the password, but this works well with bcrypt.
+     *
+     * @ORM\Column(type="string", length=64)
+     */
+    private $password;
+
+
+    /**
+     * @ORM\Column(type="string", length=25, unique=true)
+     */
+    private $username;
+
+    /**
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $telfixe;
@@ -58,15 +99,6 @@ class User
      */
     private $telpro;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $login;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $mdp;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Reporting", mappedBy="users")
@@ -74,20 +106,88 @@ class User
     private $reportings;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Civilite", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Civilite", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $civilite;
 
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\UserType", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $type;
-
     public function __construct()
     {
         $this->reportings = new ArrayCollection();
+        $this->isActive = true;
+        // may not be needed, see section on salt below
+        // $this->salt = md5(uniqid('', true));
+    }
+
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($password)
+    {
+        $this->plainPassword = $password;
+    }
+
+    public function getSalt()
+    {
+        // you *may* need a real salt depending on your encoder
+        // see section on salt below
+        return null;
+    }
+
+    public function getRoles()
+    {
+        $roles = $this->roles;
+        if (is_array($roles)) {
+            return array_unique($roles);
+        } else {
+
+        }
+    }
+    public function setRoles(array $roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            // see section on salt below
+            // $this->salt
+            ) = unserialize($serialized, array('allowed_classes' => false));
     }
 
     public function getId(): ?int
@@ -191,26 +291,14 @@ class User
         return $this;
     }
 
-    public function getLogin(): ?string
+    public function getPassword(): ?string
     {
-        return $this->login;
+        return $this->password;
     }
 
-    public function setLogin(string $login): self
+    public function setPassword(string $password): self
     {
-        $this->login = $login;
-
-        return $this;
-    }
-
-    public function getMdp(): ?string
-    {
-        return $this->mdp;
-    }
-
-    public function setMdp(string $mdp): self
-    {
-        $this->mdp = $mdp;
+        $this->password = $password;
 
         return $this;
     }
@@ -254,16 +342,6 @@ class User
 
         return $this;
     
-}
-    public function getType(): ?UserType
-    {
-        return $this->type;
     }
 
-    public function setType(UserType $type): self
-    {
-        $this->type = $type;
-
-        return $this;
-    }
 }
