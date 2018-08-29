@@ -6,6 +6,8 @@ use App\Entity\Reporting;
 use App\Entity\User;
 use App\Entity\ReportingType as Rtype;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -28,11 +30,16 @@ class ReportingType extends AbstractType
             ))
             ->add('users', EntityType::class, array(
                 'class' => User::class,
+                'multiple' => true,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')
-                        ->orderBy('u.prenom', 'ASC');
+                        ->where('u.rolenumber = :search')
+                        ->orWhere('u.rolenumber = :search2')
+                        ->orderBy('u.prenom', 'ASC')
+                        ->setParameters(array ('search' => 1,
+                            'search2' => 3));
                 },
-                'choice_label' => 'prenom',
+                'choice_label' => 'prenom' . 'nom',
             ))
         ;
     }

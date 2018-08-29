@@ -111,6 +111,11 @@ class User implements UserInterface, \Serializable
      */
     private $civilite;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $rolenumber;
+
     public function __construct()
     {
         $this->reportings = new ArrayCollection();
@@ -210,6 +215,11 @@ class User implements UserInterface, \Serializable
     public function getPrenom(): ?string
     {
         return $this->prenom;
+    }
+
+    public function getPrenomnom(): ?string
+    {
+        return $this->prenom . ' ' . $this->nom;
     }
 
     public function setPrenom(string $prenom): self
@@ -342,6 +352,18 @@ class User implements UserInterface, \Serializable
 
         return $this;
     
+    }
+
+    public function getRolenumber(): ?string
+    {
+        return $this->rolenumber;
+    }
+
+    public function setRolenumber(string $rolenumber): self
+    {
+        $this->rolenumber = $rolenumber;
+
+        return $this;
     }
 
 }

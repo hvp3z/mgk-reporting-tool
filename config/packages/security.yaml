@@ -16,8 +16,14 @@ security:
             security: false
         main:
             anonymous: ~
-            http_basic: ~
+            #http_basic: ~
             provider: our_db_provider
+            form_login:
+                login_path: login
+                check_path: login
+            logout:
+                path:   /logout
+                target: /login
 
             # activate different ways to authenticate
 
@@ -31,9 +37,10 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # require ROLE_ADMIN for all pages
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/reporting, roles: [ROLE_ADMIN, ROLE_PILOTE] }
         - { path: ^/civilite, roles: ROLE_ADMIN }
-        - { path: ^/intervention, roles: [ROLE_ADMIN, ROLE_PILOTE, ROLE_CLIENTFINAL] }
+        - { path: ^/intervention, roles: [ROLE_PILOTE, ROLE_CLIENTFINAL] }
         - { path: ^/reporting_type, roles: ROLE_ADMIN }
         - { path: ^/user, roles: [ROLE_ADMIN,ROLE_PILOTE] }
         - { path: ^/user_type, roles: ROLE_ADMIN }

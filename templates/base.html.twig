@@ -7,6 +7,7 @@
             <!--<link href="../node_modules/mdbootstrap/css/bootstrap.css" rel="stylesheet">
             <link href="../node_modules/mdbootstrap/css/mdb.css" rel="stylesheet">-->
             <link rel="stylesheet" href="https://bootswatch.com/4/materia/bootstrap.min.css">
+
         {% endblock %}
     </head>
     <body>
@@ -19,33 +20,45 @@
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
                     {% if is_granted('ROLE_ADMIN') %}
-                        <span style="color:red;">Administrator</span>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">Accueil <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
+                        <span style="color:red;">Administrateur</span>
+                        <li class="nav-item"> <!-- class pour activer : active -->
                             <a class="nav-link" href="/reporting">Reportings</a>
                         </li>
+                       <!--<li class="nav-item">
+                            <a class="nav-link" href="/intervention">Interventions</a>
+                        </li>-->
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Pricing</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link" href="/user">Utilisateurs</a>
                         </li>
                     {% elseif is_granted('ROLE_PILOTE') %}
                         <span style="color:red;">Pilote</span>
+                        <li class="nav-item"> <!-- class pour activer : active -->
+                            <a class="nav-link" href="/reporting">Reportings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/intervention">Interventions</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user">Utilisateurs</a>
+                        </li>
                     {% elseif is_granted('ROLE_CLIENTFINAL') %}
                         <span style="color:red;">Final</span>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/intervention">Interventions</a>
+                        </li>
                     {% endif %}
                 </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <button class="btn btn-danger my-2 my-sm-0" type="submit" href="/logout">Déconnexion</button>
+                <form action="{{ path('logout') }}" class="form-inline my-2 my-lg-0">
+                    <button class="btn btn-danger my-2 my-sm-0" type="submit">Déconnexion</button>
                 </form>
             </div>
         </nav>
         <div class="container" style="margin-top:100px;">
             {% block body %}{% endblock %}
         </div>
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+            <script type="javascript" src="https://bootswatch.com/_vendor/jquery/dist/jquery.min.js"></script>
+            <script type="javascript" src="https://bootswatch.com/_vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+        {% endblock %}
     </body>
 </html>

@@ -37,7 +37,13 @@ class UserController extends Controller
         // 2) handle the submit (will only happen on POST)
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
+            if ($_POST['user']['roles'][0] == 'ROLE_ADMIN') {
+                $user->setRolenumber(1);
+            } elseif ($_POST['user']['roles'][0] == 'ROLE_PILOTE') {
+                $user->setRolenumber(2);
+            } elseif ($_POST['user']['roles'][0] == 'ROLE_CLIENTFINAL') {
+                $user->setRolenumber(3);
+            }
             // 3) Encode the password (you could also do this via Doctrine listener)
             $password = $passwordEncoder->encodePassword($user, $user->getPlainPassword());
             $user->setPassword($password);

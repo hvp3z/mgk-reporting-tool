@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Intervention index{% endblock %}
+{% block title %}Interventions{% endblock %}
 
 {% block body %}
-    <h1>Intervention index</h1>
+    <h1>Interventions</h1>
 
     <table class="table">
         <thead>
@@ -17,8 +17,8 @@
             <tr>
                 <td>{{ intervention.id }}</td>
                 <td>
-                    <a href="{{ path('intervention_show', {'id': intervention.id}) }}">show</a>
-                    <a href="{{ path('intervention_edit', {'id': intervention.id}) }}">edit</a>
+                    <a href="{{ path('intervention_show', {'id': intervention.id}) }}">Détail</a>
+                    <a href="{{ path('intervention_edit', {'id': intervention.id}) }}">Modifier</a>
                 </td>
             </tr>
         {% else %}
